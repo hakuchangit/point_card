@@ -130,4 +130,5 @@ build/
 *.iml
 .idea/
 
+upload_certificate.pem
 # End of https://www.toptal.com/developers/gitignore/api/flutter
