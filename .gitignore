@@ -111,4 +111,23 @@ lib/generated_plugin_registrant.dart
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
+# ---- Android backup & local build stuff ----
+android_backup_*/
+android/key.properties
+android/app/keystore.jks
+
+# ---- iOS build artifacts ----
+ios/Flutter/Flutter.podspec
+ios/Pods/
+ios/Runner.xcworkspace/xcuserdata/
+
+# ---- Flutter build artifacts ----
+.dart_tool/
+.buildlog/
+build/
+
+# ---- Misc ----
+*.iml
+.idea/
+
 # End of https://www.toptal.com/developers/gitignore/api/flutter
