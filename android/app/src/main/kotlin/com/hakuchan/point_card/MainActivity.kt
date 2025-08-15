@@ -1,4 +1,4 @@
-package com.example.point_card
+package com.hakuchan.point_card
 
 import io.flutter.embedding.android.FlutterActivity
 
