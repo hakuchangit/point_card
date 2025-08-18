@@ -1,16 +1,32 @@
 // ポイントカードのリワードのクラス
 class PointCardReward {
   final String id; // 主キー
-  final String point_card_id; // 外部キー
-  final String reward_name;
-  final String reward_description;
-  final int reward_point_num;
+  final String pointCardId; // 外部キー
+  final String rewardName;
+  final String rewardDescription;
+  final int rewardPointNum;
 
-  PointCardReward({
+  const PointCardReward({
     required this.id,
-    required this.point_card_id,
-    required this.reward_name,
-    required this.reward_description,
-    required this.reward_point_num,
+    required this.pointCardId,
+    required this.rewardName,
+    required this.rewardDescription,
+    required this.rewardPointNum,
   });
+
+  PointCardReward copyWith({
+    String? id,
+    String? pointCardId,
+    String? rewardName,
+    String? rewardDescription,
+    int? rewardPointNum,
+  }) {
+    return PointCardReward(
+      id: id ?? this.id,
+      pointCardId: pointCardId ?? this.pointCardId,
+      rewardName: rewardName ?? this.rewardName,
+      rewardDescription: rewardDescription ?? this.rewardDescription,
+      rewardPointNum: rewardPointNum ?? this.rewardPointNum,
+    );
+  }
 }

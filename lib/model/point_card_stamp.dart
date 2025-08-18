@@ -1,16 +1,31 @@
 // ポイントカードのスタンプのクラス
 class PointCardStamp {
   final String id; // 主キー
-  final String point_card_id; // 外部キー
-  final int stamp_number;
-  final bool is_stamped;
-  final String stamp_url;
+  final String pointCardId; // 外部キー
+  final int stampNumber; // 1,2,3... の連番
+  final bool isStamped; // 押印済みか
+  final String? stampUrl; // 画像URLなど（任意）
 
-  PointCardStamp({
+  const PointCardStamp({
     required this.id,
-    required this.point_card_id,
-    required this.stamp_number,
-    required this.is_stamped,
-    required this.stamp_url,
-  });
+    required this.pointCardId,
+    required this.stampNumber,
+    required this.isStamped,
+    this.stampUrl,
+  }) : assert(stampNumber >= 1, 'stampNumber must be >= 1');
+  PointCardStamp copyWith({
+    String? id,
+    String? pointCardId,
+    int? stampNumber,
+    bool? isStamped,
+    String? stampUrl, // ここは null 代入も許したいなら別途フラグ方式に
+  }) {
+    return PointCardStamp(
+      id: id ?? this.id,
+      pointCardId: pointCardId ?? this.pointCardId,
+      stampNumber: stampNumber ?? this.stampNumber,
+      isStamped: isStamped ?? this.isStamped,
+      stampUrl: stampUrl ?? this.stampUrl,
+    );
+  }
 }
