@@ -1,4 +1,7 @@
 // ポイントカードのリワードのクラス
+import 'package:flutter/foundation.dart';
+
+@immutable
 class PointCardReward {
   final String id; // 主キー
   final String pointCardId; // 外部キー

@@ -1,4 +1,7 @@
 // ポイントカードのクラス
+import 'package:flutter/foundation.dart';
+
+@immutable
 class PointCard {
   final String id;
   final String title;
