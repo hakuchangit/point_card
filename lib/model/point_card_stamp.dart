@@ -18,6 +18,7 @@ class PointCardStamp {
   }) : assert(stampNumber >= 1, 'stampNumber must be >= 1');
 
   static const _unset = Object();
+  // imutableなので変更できるようにcopywithメソッドを追加
   PointCardStamp copyWith({
     String? id,
     String? pointCardId,
