@@ -58,6 +58,15 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // 入力値のバリデーション
+          // ポイントカードを保存
+          // Navigator.pop
+        },
+        child: Text('保存'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
