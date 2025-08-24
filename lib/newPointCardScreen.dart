@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../widget/number_form_field.dart';
+import '../widget/reward_list_editor.dart';
 
 class NewPointCardScreen extends StatefulWidget {
   const NewPointCardScreen({super.key});
@@ -12,6 +13,7 @@ class NewPointCardScreen extends StatefulWidget {
 class _NewPointCardScreenState extends State<NewPointCardScreen> {
   int _selectedNumber = 0;
   String _title = '';
+  List<RewardItem> _rewards = [];
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +45,14 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
                 setState(() {
                   _selectedNumber = value;
                 });
+              },
+            ),
+            Text('ご褒美設定', style: Theme.of(context).textTheme.bodyLarge),
+            RewardListEditor(
+              initialItems: _rewards,
+              onChanged: (list) {
+                _rewards = list;
+                // setState は画面表示を変えたい時だけでOK
               },
             ),
           ],
