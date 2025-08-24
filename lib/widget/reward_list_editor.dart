@@ -75,9 +75,10 @@ class _RewardListEditorState extends State<RewardListEditor> {
           const SizedBox(height: 8),
           const Divider(height: 1),
           const SizedBox(height: 8),
-
-          // リスト部分（スクロールさせる）
-          Expanded(
+          SizedBox(
+            height: 200,
+            // リスト部分（スクロールさせる）
+            //Expanded(
             child: _items.isEmpty
                 ? Center(
                     child: Text(
@@ -110,6 +111,10 @@ class _RewardListEditorState extends State<RewardListEditor> {
                                 hintText: '例: アイス',
                                 border: OutlineInputBorder(),
                                 isDense: true,
+                                contentPadding: EdgeInsets.symmetric(
+                                  vertical: 15,
+                                  horizontal: 8,
+                                ),
                               ),
                               onChanged: (v) {
                                 item.reward = v;
@@ -128,13 +133,14 @@ class _RewardListEditorState extends State<RewardListEditor> {
                       );
                     },
                   ),
+            //),
           ),
 
           const SizedBox(height: 12),
 
           // 追加ボタンはリストの外（固定表示）
           Align(
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.center,
             child: OutlinedButton.icon(
               onPressed: _addRow,
               icon: const Icon(Icons.add),
