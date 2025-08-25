@@ -30,16 +30,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-    # Hive 本体
-  hive: ^2.2.3
 
-  # Flutter 用の拡張 (Hive.initFlutter などが使える)
+  # Hive 関連
+  hive: ^2.2.3
   hive_flutter: ^1.1.0
 
+  # UI パッケージ
   flutter_picker_plus: ^1.5.2
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  flutter_slidable: ^3.0.0
   cupertino_icons: ^1.0.8
 
 dev_dependencies:

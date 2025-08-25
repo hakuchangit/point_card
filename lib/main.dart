@@ -4,6 +4,7 @@ import 'hive_universal_store.dart';
 import 'hive_box.dart';
 import 'package:path_provider/path_provider.dart';
 import 'model/point_card.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -88,32 +89,46 @@ class _MainCardPageState extends State<MainCardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          child: ListView.builder(
-              itemCount: _allLists?.length ?? 0,
+      appBar: AppBar(title: const Text('Point Cards')),
+      body: (_allPointCards == null || _allPointCards!.isEmpty)
+          ? const Center(child: Text('カードがありません'))
+          : ListView.builder(
+              itemCount: _allPointCards!.length,
               itemBuilder: (context, index) {
-                final item = _allLists![index];
-                return ListTile(
-                  title: Text(item.title),
-                  subtitle: Text(item.description),
+                final item = _allPointCards![index];
+                return Slidable(
+                  key: ValueKey(item.id),
+                  endActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) async {
+                          // await HiveBoxes.pointCards().delete(item.id);
+                          print("delete: ${item.id}");
+                          _loadPointCards();
+                        },
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                      ),
+                    ],
+                  ),
+                  child: ListTile(
+                    title: Text(item.title),
+                    subtitle: Text(item.description),
+                    onTap: () {
+                      // 詳細へ遷移など
+                    },
+                  ),
                 );
               },
             ),
-          ],
-        ),
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: _newPointCard,
-        tooltip: 'Increment',
+        tooltip: '追加',
         child: const Icon(Icons.add),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
