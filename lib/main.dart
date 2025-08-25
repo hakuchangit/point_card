@@ -1,31 +1,27 @@
 import 'package:flutter/material.dart';
 import 'newPointCardScreen.dart';
-// import 'hive_universal_store.dart';
-// import 'hive_box.dart';
+import 'hive_universal_store.dart';
+import 'hive_box.dart';
 import 'package:path_provider/path_provider.dart';
 
-void main() {
-  debugPrint("=== APP MAIN STARTED ===");
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Hiveのロック削除（安全策）
+  try {
+    await HiveUniversal.cleanupHiveLockFiles();
+  } catch (e, st) {
+    debugPrint("cleanupHiveLockFiles error: $e\n$st");
+  }
+  // Hive初期化
+  try {
+    await HiveUniversal.init(); // ← pathは渡さない
+  } catch (e, st) {
+    debugPrint("Hive init error: $e\n$st");
+  }
+
   runApp(const MyApp());
 }
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-
-//   // Hiveのロック削除（安全策）
-//   try {
-//     await HiveUniversal.cleanupHiveLockFiles();
-//   } catch (e, st) {
-//     debugPrint("cleanupHiveLockFiles error: $e\n$st");
-//   }
-//   // Hive初期化
-//   try {
-//     await HiveUniversal.init(); // ← pathは渡さない
-//   } catch (e, st) {
-//     debugPrint("Hive init error: $e\n$st");
-//   }
-
-//   runApp(const MyApp());
-// }
 
 // 🔹 MyApp を StatefulWidget に修正
 class MyApp extends StatefulWidget {
@@ -69,12 +65,12 @@ class _MainCardPageState extends State<MainCardPage> {
   }
 
   void _loadPointCards() async {
-    // final cardBox = await HiveBoxes.pointCards();
-    // final allCards = await cardBox.list();
-    // print("PointCardの件数: ${allCards.length}");
-    // setState(() {
-    //   _counter = allCards.length;
-    // });
+    final cardBox = await HiveBoxes.pointCards();
+    final allCards = await cardBox.list();
+    print("PointCardの件数: ${allCards.length}");
+    setState(() {
+      _counter = allCards.length;
+    });
   }
 
   void _newPointCard() {

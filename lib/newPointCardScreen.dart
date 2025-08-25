@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import '../widget/number_form_field.dart';
 import '../widget/reward_list_editor.dart';
 import '../model/point_card.dart';
+import '../model/point_card_reward.dart';
+import '../hive_box.dart';
 
 class NewPointCardScreen extends StatefulWidget {
   const NewPointCardScreen({super.key});
@@ -96,6 +98,19 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
             id: DateTime.now().millisecondsSinceEpoch.toString(),
           );
           print(pointCard.toString());
+          final cardBox = await HiveBoxes.pointCards();
+          await cardBox.put(pointCard.id, pointCard);
+          final rewardBox = await HiveBoxes.rewardItems();
+          for (var reward in _rewards) {
+            final rewardItem = PointCardReward(
+              id: DateTime.now().millisecondsSinceEpoch.toString(),
+              pointCardId: pointCard.id,
+              rewardName: reward.reward_title,
+              rewardDescription: "割愛",
+              rewardPointNum: reward.point!,
+            );
+            await rewardBox.put(rewardItem.id, rewardItem);
+          }
 
           Navigator.pop(context);
           // ポイントカードを保存
