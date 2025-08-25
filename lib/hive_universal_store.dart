@@ -2,6 +2,8 @@
 // deps: hive ^2.x, hive_flutter ^1.x
 import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 typedef JsonMap = Map<String, dynamic>;
 typedef FromJson<T> = T Function(JsonMap);
@@ -16,21 +18,45 @@ class JsonCodecT<T> {
 
 /// ライブラリ全体の初期化（複数回呼んでも安全）
 class HiveUniversal {
+  static Future<void> cleanupHiveLockFiles() async {
+    final dir = await getApplicationDocumentsDirectory();
+    for (var file in dir.listSync()) {
+      if (file.path.endsWith('.lock')) {
+        try {
+          await File(file.path).delete();
+          print("Deleted Hive lock file: ${file.path}");
+        } catch (_) {}
+      }
+    }
+  }
+
   static bool _inited = false;
 
   static Future<void> init({String? path, bool flutter = true}) async {
     if (_inited) return;
+
     if (flutter) {
       try {
-        await Hive.initFlutter(path);
+        // Flutter の場合は引数を取らない
+        await Hive.initFlutter();
       } catch (_) {}
     } else {
       try {
-        Hive.init(path!);
+        if (path == null) {
+          throw ArgumentError("Hive.init(path) を使う場合は path が必要です。");
+        }
+        Hive.init(path);
       } catch (_) {}
     }
+
     _inited = true;
   }
+
+  /// すべてのBoxを閉じる
+  // static Future<void> close() async {
+  //   await Hive.close();
+  //   _inited = false; // 次回またinitできるようにするならここで戻す
+  // }
 }
 
 /// 任意のコレクション（箱）に T を保存する“超薄い”汎用ストア。

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../widget/number_form_field.dart';
 import '../widget/reward_list_editor.dart';
+import '../model/point_card.dart';
 
 class NewPointCardScreen extends StatefulWidget {
   const NewPointCardScreen({super.key});
@@ -76,7 +77,7 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
+        onPressed: () async {
           if (_title.trim().isEmpty) {
             _showError("タイトルを入力してください。");
             return;
@@ -85,6 +86,17 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
             _showError("ポイント数は 1 以上を入力してください。");
             return;
           }
+          // ポイントカードを保存
+
+          PointCard pointCard = PointCard(
+            title: _title,
+            pointNum: _selectedNumber,
+            description: "割愛",
+            createdAt: DateTime.now(),
+            id: DateTime.now().millisecondsSinceEpoch.toString(),
+          );
+          print(pointCard.toString());
+
           Navigator.pop(context);
           // ポイントカードを保存
         },

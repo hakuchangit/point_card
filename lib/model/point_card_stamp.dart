@@ -37,4 +37,36 @@ class PointCardStamp {
           : stampUrl as String?,
     );
   }
+
+  @override
+  String toString() =>
+      'PointCardStamp(id: $id, pointCardId: $pointCardId, stampNumber: $stampNumber, isStamped: $isStamped, stampUrl: $stampUrl)';
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'pointCardId': pointCardId,
+    'stampNumber': stampNumber,
+    'isStamped': isStamped,
+    'stampUrl': stampUrl,
+  };
+  factory PointCardStamp.fromJson(Map<String, dynamic> json) {
+    try {
+      return PointCardStamp(
+        id: json['id'] as String,
+        pointCardId: json['pointCardId'] as String,
+        stampNumber: (json['stampNumber'] as num).toInt(),
+        isStamped: json['isStamped'] as bool,
+        stampUrl: json['stampUrl'] as String?,
+      );
+    } catch (e, st) {
+      PointCardStamp(
+        id: '',
+        pointCardId: '',
+        stampNumber: 0,
+        isStamped: false,
+        stampUrl: '',
+      );
+      rethrow;
+    }
+  }
 }

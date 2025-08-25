@@ -32,4 +32,37 @@ class PointCardReward {
       rewardPointNum: rewardPointNum ?? this.rewardPointNum,
     );
   }
+
+  @override
+  String toString() {
+    return 'PointCardReward(id: $id, pointCardId: $pointCardId, rewardName: $rewardName, rewardDescription: $rewardDescription, rewardPointNum: $rewardPointNum)';
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'pointCardId': pointCardId,
+    'rewardName': rewardName,
+    'rewardDescription': rewardDescription,
+    'rewardPointNum': rewardPointNum,
+  };
+  factory PointCardReward.fromJson(Map<String, dynamic> json) {
+    try {
+      return PointCardReward(
+        id: json['id'],
+        pointCardId: json['pointCardId'],
+        rewardName: json['rewardName'],
+        rewardDescription: json['rewardDescription'],
+        rewardPointNum: json['rewardPointNum'],
+      );
+    } catch (e, st) {
+      debugPrint("PointCard.fromJson error: $e\n$st");
+      return PointCardReward(
+        id: '',
+        pointCardId: '',
+        rewardName: '',
+        rewardDescription: '',
+        rewardPointNum: 0,
+      );
+    }
+  }
 }

@@ -4,10 +4,10 @@ import '../widget/number_form_field.dart';
 /// 1行分のモデル
 class RewardItem {
   int? point;
-  String reward;
-  RewardItem({this.point, this.reward = ''});
+  String reward_title;
+  RewardItem({this.point, this.reward_title = ''});
 
-  RewardItem copy() => RewardItem(point: point, reward: reward);
+  RewardItem copy() => RewardItem(point: point, reward_title: reward_title);
 }
 
 class RewardListEditor extends StatefulWidget {
@@ -106,7 +106,7 @@ class _RewardListEditorState extends State<RewardListEditor> {
                           const SizedBox(width: 8),
                           Expanded(
                             child: TextFormField(
-                              initialValue: item.reward,
+                              initialValue: item.reward_title,
                               decoration: const InputDecoration(
                                 hintText: '例: アイス',
                                 border: OutlineInputBorder(),
@@ -117,7 +117,7 @@ class _RewardListEditorState extends State<RewardListEditor> {
                                 ),
                               ),
                               onChanged: (v) {
-                                item.reward = v;
+                                item.reward_title = v;
                                 _notify();
                               },
                               validator: (v) =>
