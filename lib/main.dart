@@ -5,6 +5,7 @@ import 'hive_box.dart';
 import 'package:path_provider/path_provider.dart';
 import 'model/point_card.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'widget/point_card_visual.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -115,12 +116,20 @@ class _MainCardPageState extends State<MainCardPage> {
                       ),
                     ],
                   ),
-                  child: ListTile(
-                    title: Text(item.title),
-                    subtitle: Text(item.description),
-                    onTap: () {
-                      // 詳細へ遷移など
-                    },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 8,
+                    ),
+                    child: PointCardVisual(
+                      title: item.title,
+                      rewardsText: item
+                          .description, // 複数行OK（例: "10スタンプで外食\n20スタンプでお小遣い500円"）
+                      // remainingStamps: item.nextRemain, // ← あれば渡す。無ければ省略で非表示
+                      onTap: () {
+                        // 詳細へ遷移など
+                      },
+                    ),
                   ),
                 );
               },
