@@ -11,9 +11,25 @@ class NewPointCardScreen extends StatefulWidget {
 }
 
 class _NewPointCardScreenState extends State<NewPointCardScreen> {
-  int _selectedNumber = 0;
+  int _selectedNumber = 1;
   String _title = '';
   List<RewardItem> _rewards = [];
+
+  void _showError(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text("入力エラー"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +76,16 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // 入力値のバリデーション
+          if (_title.trim().isEmpty) {
+            _showError("タイトルを入力してください。");
+            return;
+          }
+          if (_selectedNumber <= 0) {
+            _showError("ポイント数は 1 以上を入力してください。");
+            return;
+          }
+          Navigator.pop(context);
           // ポイントカードを保存
-          // Navigator.pop
         },
         child: Text('保存'),
       ),
