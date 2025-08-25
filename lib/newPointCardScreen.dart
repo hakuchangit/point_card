@@ -15,6 +15,7 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
   String _title = '';
   List<RewardItem> _rewards = [];
 
+  // errorダイアログ
   void _showError(String message) {
     showDialog(
       context: context,
