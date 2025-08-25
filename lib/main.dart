@@ -3,6 +3,7 @@ import 'newPointCardScreen.dart';
 import 'hive_universal_store.dart';
 import 'hive_box.dart';
 import 'package:path_provider/path_provider.dart';
+import 'model/point_card.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +58,7 @@ class MainCardPage extends StatefulWidget {
 
 class _MainCardPageState extends State<MainCardPage> {
   int _counter = 0;
+  List<PointCard> _allPointCards = [];
 
   @override
   void initState() {
@@ -70,6 +72,7 @@ class _MainCardPageState extends State<MainCardPage> {
     print("PointCardの件数: ${allCards.length}");
     setState(() {
       _counter = allCards.length;
+      _allPointCards = allCards;
     });
   }
 
@@ -92,11 +95,15 @@ class _MainCardPageState extends State<MainCardPage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+          child: ListView.builder(
+              itemCount: _allLists?.length ?? 0,
+              itemBuilder: (context, index) {
+                final item = _allLists![index];
+                return ListTile(
+                  title: Text(item.title),
+                  subtitle: Text(item.description),
+                );
+              },
             ),
           ],
         ),
