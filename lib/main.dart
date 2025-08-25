@@ -103,7 +103,9 @@ class _MainCardPageState extends State<MainCardPage> {
                     children: [
                       SlidableAction(
                         onPressed: (context) async {
-                          // await HiveBoxes.pointCards().delete(item.id);
+                          final box =
+                              await HiveBoxes.pointCards(); // Box<PointCard>
+                          await box.delete(item.id);
                           print("delete: ${item.id}");
                           _loadPointCards();
                         },
