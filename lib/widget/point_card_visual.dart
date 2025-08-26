@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import '../model/point_card_reward.dart';
 
 class PointCardVisual extends StatelessWidget {
   final String title;
   final String rewardsText; // ご褒美ルールをテキストでまとめて渡す
   final int? remainingStamps; // 「次のご褒美まであとN」(任意)
   final VoidCallback? onTap;
+  final List<PointCardReward> rewards;
 
   const PointCardVisual({
     super.key,
@@ -12,6 +14,7 @@ class PointCardVisual extends StatelessWidget {
     required this.rewardsText,
     this.remainingStamps,
     this.onTap,
+    required this.rewards,
   });
 
   @override

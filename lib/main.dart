@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'model/point_card.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'widget/point_card_visual.dart';
+import 'model/point_card_reward.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,7 +61,7 @@ class MainCardPage extends StatefulWidget {
 
 class _MainCardPageState extends State<MainCardPage> {
   int _counter = 0;
-  List<PointCard> _allPointCards = [];
+  List<Map<String, dynamic>> _allPointCards = [];
 
   @override
   void initState() {
@@ -68,15 +69,15 @@ class _MainCardPageState extends State<MainCardPage> {
     _loadPointCards();
   }
 
-  void _loadPointCards() async {
-    final cardBox = await HiveBoxes.pointCards();
-    final allCards = await cardBox.list();
-    print("PointCardの件数: ${allCards.length}");
-    setState(() {
-      _counter = allCards.length;
-      _allPointCards = allCards;
-    });
-  }
+  // void _loadPointCards() async {
+  //   final cardBox = await HiveBoxes.pointCards();
+  //   final allCards = await cardBox.list();
+  //   print("PointCardの件数: ${allCards.length}");
+  //   setState(() {
+  //     _counter = allCards.length;
+  //     _allPointCards = allCards;
+  //   });
+  // }
 
   void _newPointCard() {
     Navigator.push(
@@ -84,6 +85,36 @@ class _MainCardPageState extends State<MainCardPage> {
       MaterialPageRoute(builder: (context) => const NewPointCardScreen()),
     ).then((_) {
       _loadPointCards(); // 戻ってきたら件数を更新
+    });
+  }
+
+  void _loadPointCards() async {
+    final cardBox = await HiveBoxes.pointCards(); // BoxCollection<PointCard>
+    final rewardBox =
+        await HiveBoxes.rewardItems(); // BoxCollection<PointCardReward>
+
+    // すべてのカードを取得
+    final cards = await cardBox.list();
+    // すべてのリワードを取得
+    final allRewards = await rewardBox.list();
+
+    // 各カードに紐づくリワードを検索してまとめる
+    final enrichedCards = cards.map((card) {
+      final rewardsForCard = allRewards
+          .where((r) => r.pointCardId == card.id)
+          .toList();
+
+      return {
+        "card": card,
+        "rewards": rewardsForCard,
+        "rewardsText": rewardsForCard
+            .map((r) => "${r.rewardPointNum}スタンプで${r.rewardName}")
+            .join("\n"),
+      };
+    }).toList();
+    setState(() {
+      _counter = cards.length; // 件数はカードの数
+      _allPointCards = enrichedCards; // ← こちらだけをセット
     });
   }
 
@@ -96,9 +127,11 @@ class _MainCardPageState extends State<MainCardPage> {
           : ListView.builder(
               itemCount: _allPointCards!.length,
               itemBuilder: (context, index) {
-                final item = _allPointCards![index];
+                final card = _allPointCards![index]["card"] as PointCard;
+                final rewards =
+                    _allPointCards![index]["rewards"] as List<PointCardReward>;
                 return Slidable(
-                  key: ValueKey(item.id),
+                  key: ValueKey(card.id),
                   endActionPane: ActionPane(
                     motion: const ScrollMotion(),
                     children: [
@@ -106,8 +139,8 @@ class _MainCardPageState extends State<MainCardPage> {
                         onPressed: (context) async {
                           final box =
                               await HiveBoxes.pointCards(); // Box<PointCard>
-                          await box.delete(item.id);
-                          print("delete: ${item.id}");
+                          await box.delete(card.id);
+                          print("delete: ${card.id}");
                           _loadPointCards();
                         },
                         backgroundColor: Colors.red,
@@ -122,8 +155,9 @@ class _MainCardPageState extends State<MainCardPage> {
                       vertical: 8,
                     ),
                     child: PointCardVisual(
-                      title: item.title,
-                      rewardsText: item
+                      title: card.title,
+                      rewards: rewards,
+                      rewardsText: card
                           .description, // 複数行OK（例: "10スタンプで外食\n20スタンプでお小遣い500円"）
                       // remainingStamps: item.nextRemain, // ← あれば渡す。無ければ省略で非表示
                       onTap: () {
