@@ -47,11 +47,13 @@ class PointCardVisual extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               // 複数行の説明をそのまま表示（\nで改行）
-              Text(
-                rewardsText,
-                textAlign: TextAlign.center,
-                style: t.bodyLarge,
-              ),
+              for (var reward in rewards) ...[
+                Text(
+                  reward.rewardName,
+                  textAlign: TextAlign.center,
+                  style: t.bodyLarge,
+                ),
+              ],
               const SizedBox(height: 20),
               if (remainingStamps != null) ...[
                 Text(
