@@ -34,6 +34,7 @@ dependencies:
   # Hive 関連
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  image_picker: ^1.0.7
 
   # UI パッケージ
   flutter_picker_plus: ^1.5.2

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'newPointCardScreen.dart';
+import 'screen/new_point_card_screen.dart';
 import 'hive_universal_store.dart';
 import 'hive_box.dart';
 import 'package:path_provider/path_provider.dart';
@@ -7,6 +7,7 @@ import 'model/point_card.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'widget/point_card_visual.dart';
 import 'model/point_card_reward.dart';
+import 'screen/point_card_detail_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -161,7 +162,15 @@ class _MainCardPageState extends State<MainCardPage> {
                           .description, // 複数行OK（例: "10スタンプで外食\n20スタンプでお小遣い500円"）
                       // remainingStamps: item.nextRemain, // ← あれば渡す。無ければ省略で非表示
                       onTap: () {
-                        // 詳細へ遷移など
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StampCardScreen(
+                              pointCard: card,
+                              rewards: rewards,
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ),
