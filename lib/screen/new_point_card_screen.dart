@@ -45,7 +45,7 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
             const SizedBox(height: 20),
             TextFormField(
               decoration: InputDecoration(border: OutlineInputBorder()),
-              onFieldSubmitted: (value) {
+              onChanged: (value) {
                 _title = value;
               },
               validator: (value) {
