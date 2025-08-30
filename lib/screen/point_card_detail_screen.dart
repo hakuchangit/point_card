@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../model/point_card.dart';
-import '../model/point_card_reward.dart';
 import '../model/point_card_stamp.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class StampCardScreen extends StatefulWidget {
   final PointCard pointCard;
-  final List<PointCardReward> rewards;
 
-  const StampCardScreen({
-    Key? key,
-    required this.pointCard,
-    required this.rewards,
-  }) : super(key: key);
+  const StampCardScreen({Key? key, required this.pointCard}) : super(key: key);
 
   @override
   State<StampCardScreen> createState() => _StampCardScreenState();
@@ -216,12 +210,12 @@ class _StampCardScreenState extends State<StampCardScreen> {
     return stamps.where((stamp) => stamp.isStamped).length;
   }
 
-  List<PointCardReward> get achievableRewards {
-    return widget.rewards
-        .where((reward) => currentStampCount >= reward.rewardPointNum)
-        .toList()
-      ..sort((a, b) => a.rewardPointNum.compareTo(b.rewardPointNum));
-  }
+  // List<PointCardReward> get achievableRewards {
+  //   return widget.rewards
+  //       .where((reward) => currentStampCount >= reward.rewardPointNum)
+  //       .toList()
+  //     ..sort((a, b) => a.rewardPointNum.compareTo(b.rewardPointNum));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -274,17 +268,9 @@ class _StampCardScreenState extends State<StampCardScreen> {
                   ),
                   const SizedBox(height: 16),
                   // リワード一覧表示
-                  ...widget.rewards.map(
-                    (reward) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 2),
-                      child: Text(
-                        '${reward.rewardPointNum}スタンプで${reward.rewardName}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ),
+                  Text(
+                    widget.pointCard.rewardTitle,
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                   ),
                 ],
               ),
@@ -416,50 +402,7 @@ class _StampCardScreenState extends State<StampCardScreen> {
                     minHeight: 8,
                   ),
                   const SizedBox(height: 16),
-                  // 獲得可能なリワード表示
-                  if (achievableRewards.isNotEmpty) ...[
-                    const Text(
-                      '🎉 獲得できるご褒美',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.green,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    ...achievableRewards.map(
-                      (reward) => Container(
-                        margin: const EdgeInsets.symmetric(vertical: 4),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.green.shade50,
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.green.shade200),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.card_giftcard,
-                              color: Colors.green,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                reward.rewardName,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.green,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
+                ], // 獲得可能なリワード表示
               ),
             ),
           ],
@@ -498,25 +441,9 @@ class StampCardPage extends StatelessWidget {
       description: '',
       createdAt: DateTime.now(),
       pointNum: 25,
+      rewardTitle: '美味しいもの',
     );
 
-    final rewards = [
-      PointCardReward(
-        id: 'reward_1',
-        pointCardId: 'card_1',
-        rewardName: '外食',
-        rewardDescription: '好きなレストランで食事',
-        rewardPointNum: 10,
-      ),
-      PointCardReward(
-        id: 'reward_2',
-        pointCardId: 'card_1',
-        rewardName: 'お小遣い500円',
-        rewardDescription: '500円のお小遣い',
-        rewardPointNum: 20,
-      ),
-    ];
-
-    return StampCardScreen(pointCard: pointCard, rewards: rewards);
+    return StampCardScreen(pointCard: pointCard);
   }
 }

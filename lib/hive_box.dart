@@ -19,16 +19,16 @@ class HiveBoxes {
     );
   }
 
-  static Future<BoxCollection<PointCardReward>> rewardItems() {
-    return BoxCollection.open<PointCardReward>(
-      namespace: "stamp_card_v1",
-      collection: "reward_items",
-      codec: JsonCodecT<PointCardReward>(
-        fromJson: PointCardReward.fromJson,
-        toJson: (r) => r.toJson(),
-      ),
-    );
-  }
+  // static Future<BoxCollection<PointCardReward>> rewardItems() {
+  //   return BoxCollection.open<PointCardReward>(
+  //     namespace: "stamp_card_v1",
+  //     collection: "reward_items",
+  //     codec: JsonCodecT<PointCardReward>(
+  //       fromJson: PointCardReward.fromJson,
+  //       toJson: (r) => r.toJson(),
+  //     ),
+  //   );
+  // }
 
   static Future<BoxCollection<PointCardStamp>> stamps() {
     return BoxCollection.open<PointCardStamp>(

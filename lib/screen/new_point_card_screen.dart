@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../widget/number_form_field.dart';
-import '../widget/reward_list_editor.dart';
-import '../model/point_card.dart';
-import '../model/point_card_reward.dart';
-import '../hive_box.dart';
+import '../../widget/number_form_field.dart';
+import '../../model/point_card.dart';
+import '../../model/point_card_reward.dart';
+import '../../hive_box.dart';
 
 class NewPointCardScreen extends StatefulWidget {
   const NewPointCardScreen({super.key});
@@ -16,7 +15,7 @@ class NewPointCardScreen extends StatefulWidget {
 class _NewPointCardScreenState extends State<NewPointCardScreen> {
   int _selectedNumber = 1;
   String _title = '';
-  List<RewardItem> _rewards = [];
+  String _rewardTitle = '';
 
   // errorダイアログ
   void _showError(String message) {
@@ -68,11 +67,17 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
               },
             ),
             Text('ご褒美設定', style: Theme.of(context).textTheme.bodyLarge),
-            RewardListEditor(
-              initialItems: _rewards,
-              onChanged: (list) {
-                _rewards = list;
-                // setState は画面表示を変えたい時だけでOK
+            const SizedBox(height: 20),
+            TextFormField(
+              decoration: InputDecoration(border: OutlineInputBorder()),
+              onFieldSubmitted: (value) {
+                _rewardTitle = value;
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'ご褒美を入力して区してください';
+                }
+                return null;
               },
             ),
           ],
@@ -88,6 +93,10 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
             _showError("ポイント数は 1 以上を入力してください。");
             return;
           }
+          if (_rewardTitle.trim().isEmpty) {
+            _showError("ご褒美を入力してください。");
+            return;
+          }
           // ポイントカードを保存
 
           PointCard pointCard = PointCard(
@@ -96,21 +105,12 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
             description: "割愛",
             createdAt: DateTime.now(),
             id: DateTime.now().millisecondsSinceEpoch.toString(),
+            rewardTitle: _rewardTitle,
           );
           print(pointCard.toString());
+          print("rewardTitle: ${pointCard.rewardTitle}");
           final cardBox = await HiveBoxes.pointCards();
           await cardBox.put(pointCard.id, pointCard);
-          final rewardBox = await HiveBoxes.rewardItems();
-          for (var reward in _rewards) {
-            final rewardItem = PointCardReward(
-              id: DateTime.now().millisecondsSinceEpoch.toString(),
-              pointCardId: pointCard.id,
-              rewardName: reward.reward_title,
-              rewardDescription: "割愛",
-              rewardPointNum: reward.point!,
-            );
-            await rewardBox.put(rewardItem.id, rewardItem);
-          }
 
           Navigator.pop(context);
           // ポイントカードを保存

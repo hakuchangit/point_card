@@ -1,6 +1,5 @@
 // ポイントカードのクラス
 import 'package:flutter/foundation.dart';
-import '../widget/reward_list_editor.dart';
 
 @immutable
 class PointCard {
@@ -9,6 +8,7 @@ class PointCard {
   final String description;
   final DateTime createdAt; // ← create_date をアプリ側では camelCase
   final int pointNum; // ← point_num を camelCase
+  final String rewardTitle;
 
   const PointCard({
     required this.id,
@@ -16,6 +16,7 @@ class PointCard {
     required this.description,
     required this.createdAt,
     required this.pointNum,
+    required this.rewardTitle,
   }) : assert(pointNum > 0, 'pointNum must be > 0');
   PointCard copyWith({
     String? id,
@@ -23,6 +24,7 @@ class PointCard {
     String? description,
     DateTime? createdAt,
     int? pointNum,
+    String? rewardTitle,
   }) {
     return PointCard(
       id: id ?? this.id,
@@ -30,13 +32,14 @@ class PointCard {
       description: description ?? this.description,
       createdAt: createdAt ?? this.createdAt,
       pointNum: pointNum ?? this.pointNum,
+      rewardTitle: rewardTitle ?? this.rewardTitle,
     );
   }
 
   @override
   String toString() {
     return 'PointCard(id: $id, title: $title, description: $description, '
-        'createdAt: $createdAt, pointNum: $pointNum)';
+        'createdAt: $createdAt, pointNum: $pointNum, rewardTitle: $rewardTitle)';
   }
 
   Map<String, dynamic> toJson() => {
@@ -45,6 +48,7 @@ class PointCard {
     'description': description,
     'createdAt': createdAt.toIso8601String(),
     'pointNum': pointNum,
+    'rewardTitle': rewardTitle,
   };
   factory PointCard.fromJson(Map<String, dynamic> json) {
     try {
@@ -54,6 +58,7 @@ class PointCard {
         description: json['description'] as String,
         createdAt: DateTime.parse(json['createdAt'] as String),
         pointNum: (json['pointNum'] as num).toInt(),
+        rewardTitle: json['rewardTitle'] as String,
       );
     } catch (e, st) {
       PointCard(
@@ -62,6 +67,7 @@ class PointCard {
         description: '',
         createdAt: DateTime.now(),
         pointNum: 0,
+        rewardTitle: '',
       );
       rethrow;
     }
