@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../../widget/number_form_field.dart';
 import '../../model/point_card.dart';
-import '../../model/point_card_reward.dart';
 import '../../hive_box.dart';
 
 class NewPointCardScreen extends StatefulWidget {

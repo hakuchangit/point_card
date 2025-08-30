@@ -4,6 +4,7 @@ import '../model/point_card.dart';
 import '../model/point_card_stamp.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'update_point_card_screen.dart';
 
 class StampCardScreen extends StatefulWidget {
   final PointCard pointCard;
@@ -221,13 +222,6 @@ class _StampCardScreenState extends State<StampCardScreen> {
     return stamps.where((stamp) => stamp.isStamped).length;
   }
 
-  // List<PointCardReward> get achievableRewards {
-  //   return widget.rewards
-  //       .where((reward) => currentStampCount >= reward.rewardPointNum)
-  //       .toList()
-  //     ..sort((a, b) => a.rewardPointNum.compareTo(b.rewardPointNum));
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -241,6 +235,13 @@ class _StampCardScreenState extends State<StampCardScreen> {
             icon: const Icon(Icons.edit),
             onPressed: () {
               // 編集画面への遷移
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      UpdatePointCardScreen(pointCard: widget.pointCard),
+                ),
+              );
             },
           ),
         ],
