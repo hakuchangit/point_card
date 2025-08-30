@@ -8,9 +8,16 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'widget/point_card_visual.dart';
 import 'model/point_card_reward.dart';
 import 'screen/point_card_detail_screen.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'model/point_card_stamp.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  if (!Hive.isAdapterRegistered(2)) {
+    Hive.registerAdapter(PointCardStampAdapter()); // PointCardStamp の typeId=2
+  }
+  await Hive.openBox<PointCardStamp>('stampBox');
 
   // Hiveのロック削除（安全策）
   try {

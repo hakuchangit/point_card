@@ -1,72 +1,82 @@
-// ポイントカードのスタンプのクラス
-import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 
-@immutable
-class PointCardStamp {
-  final String id; // 主キー
-  final String pointCardId; // 外部キー
-  final int stampNumber; // 1,2,3... の連番
-  final bool isStamped; // 押印済みか
-  final String? stampUrl; // 画像URLなど（任意）　・・null許容
+part 'point_card_stamp.g.dart';
 
-  const PointCardStamp({
+@HiveType(typeId: 0)
+class PointCardStamp extends HiveObject {
+  @HiveField(0)
+  final String id;
+
+  @HiveField(1)
+  final String pointCardId;
+
+  @HiveField(2)
+  final int stampNumber;
+
+  @HiveField(3)
+  final bool isStamped;
+
+  @HiveField(4)
+  final String? stampUrl;
+
+  @HiveField(5)
+  final DateTime? stampedAt;
+
+  PointCardStamp({
     required this.id,
     required this.pointCardId,
     required this.stampNumber,
-    required this.isStamped,
+    this.isStamped = false,
     this.stampUrl,
-  }) : assert(stampNumber >= 1, 'stampNumber must be >= 1');
+    this.stampedAt,
+  });
 
-  static const _unset = Object();
-  // imutableなので変更できるようにcopywithメソッドを追加
+  // JSONからインスタンスを作成
+  factory PointCardStamp.fromJson(Map<String, dynamic> json) {
+    return PointCardStamp(
+      id: json['id'] as String,
+      pointCardId: json['pointCardId'] as String,
+      stampNumber: json['stampNumber'] as int,
+      isStamped: json['isStamped'] as bool? ?? false,
+      stampUrl: json['stampUrl'] as String?,
+      stampedAt: json['stampedAt'] != null
+          ? DateTime.parse(json['stampedAt'] as String)
+          : null,
+    );
+  }
+
+  // インスタンスをJSONに変換
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'pointCardId': pointCardId,
+      'stampNumber': stampNumber,
+      'isStamped': isStamped,
+      'stampUrl': stampUrl,
+      'stampedAt': stampedAt?.toIso8601String(),
+    };
+  }
+
   PointCardStamp copyWith({
     String? id,
     String? pointCardId,
     int? stampNumber,
     bool? isStamped,
-    Object? stampUrl = _unset,
-    // ここは null 代入も許したいなら別途フラグ方式に
+    String? stampUrl,
+    DateTime? stampedAt,
   }) {
     return PointCardStamp(
       id: id ?? this.id,
       pointCardId: pointCardId ?? this.pointCardId,
       stampNumber: stampNumber ?? this.stampNumber,
       isStamped: isStamped ?? this.isStamped,
-      stampUrl: identical(stampUrl, _unset)
-          ? this.stampUrl
-          : stampUrl as String?,
+      stampUrl: stampUrl ?? this.stampUrl,
+      stampedAt: stampedAt ?? this.stampedAt,
     );
   }
 
   @override
-  String toString() =>
-      'PointCardStamp(id: $id, pointCardId: $pointCardId, stampNumber: $stampNumber, isStamped: $isStamped, stampUrl: $stampUrl)';
-
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'pointCardId': pointCardId,
-    'stampNumber': stampNumber,
-    'isStamped': isStamped,
-    'stampUrl': stampUrl,
-  };
-  factory PointCardStamp.fromJson(Map<String, dynamic> json) {
-    try {
-      return PointCardStamp(
-        id: json['id'] as String,
-        pointCardId: json['pointCardId'] as String,
-        stampNumber: (json['stampNumber'] as num).toInt(),
-        isStamped: json['isStamped'] as bool,
-        stampUrl: json['stampUrl'] as String?,
-      );
-    } catch (e, st) {
-      PointCardStamp(
-        id: '',
-        pointCardId: '',
-        stampNumber: 0,
-        isStamped: false,
-        stampUrl: '',
-      );
-      rethrow;
-    }
+  String toString() {
+    return 'PointCardStamp(id: $id, pointCardId: $pointCardId, stampNumber: $stampNumber, isStamped: $isStamped, stampUrl: $stampUrl, stampedAt: $stampedAt)';
   }
 }

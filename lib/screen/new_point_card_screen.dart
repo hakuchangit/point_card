@@ -107,8 +107,6 @@ class _NewPointCardScreenState extends State<NewPointCardScreen> {
             id: DateTime.now().millisecondsSinceEpoch.toString(),
             rewardTitle: _rewardTitle,
           );
-          print(pointCard.toString());
-          print("rewardTitle: ${pointCard.rewardTitle}");
           final cardBox = await HiveBoxes.pointCards();
           await cardBox.put(pointCard.id, pointCard);
 

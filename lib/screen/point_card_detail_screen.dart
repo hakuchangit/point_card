@@ -153,12 +153,23 @@ class _StampCardScreenState extends State<StampCardScreen> {
     );
   }
 
-  void _setEmojiStamp(PointCardStamp stamp, String emoji) async {
+  // 絵文字スタンプを設定
+  Future<void> _setEmojiStamp(PointCardStamp stamp, String emoji) async {
+    print('絵文字設定開始: $emoji');
+
     final updatedStamp = stamp.copyWith(
       isStamped: true,
       stampUrl: 'emoji:$emoji',
+      stampedAt: DateTime.now(), // スタンプした時刻も記録
     );
+
+    print('更新されたスタンプ: ${updatedStamp.toString()}');
+
+    // Hiveに保存
     await stampBox.put(stamp.id, updatedStamp);
+    print('Hive保存完了');
+
+    // データを再読み込み
     _loadStamps();
   }
 
