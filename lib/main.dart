@@ -61,7 +61,6 @@ class MainCardPage extends StatefulWidget {
 }
 
 class _MainCardPageState extends State<MainCardPage> {
-  int _counter = 0;
   List<PointCard> _allPointCards = [];
 
   @override
@@ -109,7 +108,6 @@ class _MainCardPageState extends State<MainCardPage> {
                           final box =
                               await HiveBoxes.pointCards(); // Box<PointCard>
                           await box.delete(card.id);
-                          print("delete: ${card.id}");
                           _loadPointCards();
                         },
                         backgroundColor: Colors.red,
@@ -126,6 +124,7 @@ class _MainCardPageState extends State<MainCardPage> {
                     child: PointCardVisual(
                       title: card.title,
                       rewardsText: card.rewardTitle,
+                      remainingStamps: card.pointNum,
                       onTap: () {
                         print("onTap: ${card.rewardTitle}");
                         Navigator.push(
