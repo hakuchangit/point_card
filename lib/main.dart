@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'screen/new_point_card_screen.dart';
 import 'hive_universal_store.dart';
 import 'hive_box.dart';
-import 'package:path_provider/path_provider.dart';
 import 'model/point_card.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'widget/point_card_visual.dart';
-import 'model/point_card_reward.dart';
+// import 'model/point_card_reward.dart';
 import 'screen/point_card_detail_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'model/point_card_stamp.dart';
@@ -99,12 +98,12 @@ class _MainCardPageState extends State<MainCardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Point Cards')),
-      body: (_allPointCards == null || _allPointCards!.isEmpty)
+      body: (_allPointCards.isEmpty)
           ? const Center(child: Text('カードがありません'))
           : ListView.builder(
-              itemCount: _allPointCards!.length,
+              itemCount: _allPointCards.length,
               itemBuilder: (context, index) {
-                final card = _allPointCards![index];
+                final card = _allPointCards[index];
                 return Slidable(
                   key: ValueKey(card.id),
                   endActionPane: ActionPane(

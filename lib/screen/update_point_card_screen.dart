@@ -49,7 +49,17 @@ class _UpdatePointCardScreenState extends State<UpdatePointCardScreen> {
 
   Future<void> _deletePointCard() async {
     final cardBox = await HiveBoxes.pointCards(); // BoxCollection<PointCard>
-    await cardBox.delete(widget.pointCard.id); // ← これでOK
+    final stampBox = await HiveBoxes.stamps();
+    final cardId = widget.pointCard.id;
+
+    // 関連スタンプを削除
+    final allStamps = await stampBox.list();
+    final relatedStamps = allStamps.where((s) => s.pointCardId == cardId);
+    for (final s in relatedStamps) {
+      await stampBox.delete(s.id);
+    }
+    // カードを削除
+    await cardBox.delete(widget.pointCard.id);
 
     if (!mounted) return; // dispose 済みなら何もしない
     if (mounted) {
