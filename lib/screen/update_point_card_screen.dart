@@ -67,6 +67,32 @@ class _UpdatePointCardScreenState extends State<UpdatePointCardScreen> {
     }
   }
 
+  Future<void> _confirmDelete() async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('確認'),
+          content: const Text('本当に削除しますか？'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false), // キャンセル
+              child: const Text('キャンセル'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true), // はい
+              child: const Text('はい'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result == true) {
+      await _deletePointCard();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
@@ -115,7 +141,7 @@ class _UpdatePointCardScreenState extends State<UpdatePointCardScreen> {
               // 削除ボタン
               Center(
                 child: OutlinedButton.icon(
-                  onPressed: _deletePointCard,
+                  onPressed: _confirmDelete,
                   icon: const Icon(Icons.delete_outline),
                   label: const Text('このカードを削除する'),
                   style: OutlinedButton.styleFrom(
