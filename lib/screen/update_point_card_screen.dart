@@ -48,9 +48,13 @@ class _UpdatePointCardScreenState extends State<UpdatePointCardScreen> {
   }
 
   Future<void> _deletePointCard() async {
-    final cardBox = await HiveBoxes.pointCards();
-    await cardBox.delete(widget.pointCard.id);
-    if (mounted) Navigator.pop(context);
+    final cardBox = await HiveBoxes.pointCards(); // BoxCollection<PointCard>
+    await cardBox.delete(widget.pointCard.id); // ← これでOK
+
+    if (!mounted) return; // dispose 済みなら何もしない
+    if (mounted) {
+      Navigator.popUntil(context, (route) => route.isFirst);
+    }
   }
 
   @override

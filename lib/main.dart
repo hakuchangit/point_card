@@ -140,7 +140,9 @@ class _MainCardPageState extends State<MainCardPage> {
                             builder: (context) =>
                                 StampCardScreen(pointCard: card),
                           ),
-                        );
+                        ).then((_) {
+                          _loadPointCards();
+                        });
                       },
                     ),
                   ),
